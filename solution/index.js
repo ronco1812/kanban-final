@@ -130,4 +130,24 @@ function hoverHandler({ target }) {
     document.addEventListener('keydown', moveBetweenLists)
   }
 }
-
+function taskFilter(event) {
+  const query = event.target.value
+  hideListItem(query)
+}
+function hideListItem(queryString) {
+  const sectionsNodeList = document.querySelectorAll('section')
+  for (let section of sectionsNodeList) {
+    for (let listEle of section.children[1].children) {
+      if (!notExsits(queryString, listEle.innerText)) {
+        listEle.classList.add('hidden-task')
+      } else {
+        listEle.classList.remove('hidden-task')
+      }
+    }
+  }
+}
+function notExsits(queryString, containingString) {
+  const lowerCase = queryString.toLowerCase()
+  const lowerCaseContain = containingString.toLowerCase()
+  return lowerCaseContain.includes(lowerCase)
+}
