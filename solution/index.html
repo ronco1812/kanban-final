@@ -10,9 +10,9 @@
   </head>
   <body>
     <h2 id="page-title">Task Organizer</h2>
-    <input type="search" id="search" placeholder="search task" />
+    <input type="search" id="search" placeholder="search task" onkeyup="taskFilter()" />
     <!-- <button>search</button> -->
-    <div id="task-area" ondblclick="doubleClickHandler(event)">
+    <div id="task-area" ondblclick="doubleClickHandler(event)" onmouseover="hoverHandler(event)">
       <section id="todo">
         <p>tasks to do</p>
         <ul class="to-do-tasks"></ul>

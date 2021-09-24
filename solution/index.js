@@ -1,19 +1,24 @@
 //website setup:
 setSectionsContent()
-//general variables:
 
+//global var:
+let selectedTask = ''
 
 //local storage functions:
-function addToLocalStorage(key, input) { 
-    const localStorageTaskObj = JSON.parse(localStorage.getItem('tasks'))
+function addToLocalStorage(key, input) {
+  const localStorageTaskObj = JSON.parse(localStorage.getItem('tasks'))
   localStorageTaskObj[key].unshift(input)
   localStorage.setItem('tasks', JSON.stringify(localStorageTaskObj))
 }
 
 function updateLocalStorage(key, indexOfCurrentValue, updatedValue) {
-    const localStorageTaskObj = JSON.parse(localStorage.getItem('tasks'))
+  const localStorageTaskObj = JSON.parse(localStorage.getItem('tasks'))
   const section = localStorageTaskObj[key]
-  section.splice(indexOfCurrentValue, 1, updatedValue)
+  if (!updatedValue) {
+    section.splice(indexOfCurrentValue, 1)
+  } else {
+    section.splice(indexOfCurrentValue, 1, updatedValue)
+  }
   localStorage.setItem('tasks', JSON.stringify(localStorageTaskObj))
 }
 
@@ -63,8 +68,8 @@ function updateTaskHandler(event) {
 }
 
 function setSectionsContent() {
-    const sectionsNodeList = document.querySelectorAll('section')
-    const localStorageTaskObj = JSON.parse(localStorage.getItem('tasks'))
+  const sectionsNodeList = document.querySelectorAll('section')
+  const localStorageTaskObj = JSON.parse(localStorage.getItem('tasks'))
   if (localStorage.getItem('tasks')) {
     for (let section of sectionsNodeList) {
       const sectionId = section.attributes[0].value
@@ -92,3 +97,37 @@ function createListElement(text) {
   element.innerText = text
   return element
 }
+const moveTask = (section) => {
+  const key = section.parentElement.attributes[0].value
+  const removeKey = selectedTask.parentElement.parentElement.attributes[0].value
+  const selectedTaskText = selectedTask.innerText
+  const newTaskElem = createListElement(selectedTaskText)
+  section.prepend(newTaskElem)
+  selectedTask.parentElement.removeChild(selectedTask)
+  addToLocalStorage(key, selectedTaskText)
+  updateLocalStorage(removeKey, selectedTaskText)
+  selectedTask = null
+}
+function moveBetweenLists({ altKey, key }) {
+  if (selectedTask) {
+    if (altKey && key == 1) {
+      const toDoList = document.querySelector('.to-do-tasks')
+      moveTask(toDoList)
+    }
+    if (altKey && key == 2) {
+      const toDoList = document.querySelector('.in-progress-tasks')
+      moveTask(toDoList)
+    }
+    if (altKey && key == 3) {
+      const toDoList = document.querySelector('.done-tasks')
+      moveTask(toDoList)
+    }
+  }
+}
+function hoverHandler({ target }) {
+  if (target.classList.contains('task')) {
+    selectedTask = target
+    document.addEventListener('keydown', moveBetweenLists)
+  }
+}
+
