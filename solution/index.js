@@ -3,6 +3,7 @@ setSectionsContent()
 
 //global var:
 let selectedTask = ''
+const Url = 'https://json-bins.herokuapp.com/bin/614ae6794021ac0e6c080c5b'
 
 //local storage functions:
 function addToLocalStorage(key, input) {
@@ -74,7 +75,8 @@ function setSectionsContent() {
     for (let section of sectionsNodeList) {
       const sectionId = section.attributes[0].value
       const ulElm = section.children[1]
-      for (let i = 0; i < localStorageTaskObj[sectionId].length; i++) {
+      const lengthId = localStorageTaskObj[sectionId].length
+      for (let i = 0; i < lengthId; i++) {
         ulElm.append(createListElement(localStorageTaskObj[sectionId][i]))
       }
     }
@@ -150,4 +152,84 @@ function notExsits(queryString, containingString) {
   const lowerCase = queryString.toLowerCase()
   const lowerCaseContain = containingString.toLowerCase()
   return lowerCaseContain.includes(lowerCase)
+}
+async function saveDataFromAPI() {
+  document.getElementById('saveData').innerText = 'loading'
+  const { tasks } = localStorage
+  const response = await fetch(Url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ tasks }),
+  })
+  document.getElementById('saveData').innerText = 'Save'
+  return response.json()
+}
+// async function loadDataFromAPI() {
+//   document.getElementById('loadData').innerText = 'loading'
+//   const tasksList = document.querySelectorAll('li')
+//   for (let task of tasksList) {
+//     task.remove()
+//   }
+//   let response = await fetch(Url, {
+//     method: 'GET',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//     },
+//   })
+// if(!response.ok){
+//   alert("something went wrong")
+//   document.getElementById("loadData").innerText = "Load"
+//   return
+// }
+// let task = await response.json()
+// tasks = task.tasks
+// localStorage.setItem("tasks", JSON.stringify(tasks))
+// document.getElementById('loadData').innerText = 'Load'
+
+// }
+async function loadDataFromAPI() {
+  document.getElementById('loadData').innerText = 'loading'
+  try {
+    const response = await getResponseAsJson(Url)
+    document.getElementById('loadData').innerText = 'Load'
+    const tasksObjectFromApi = JSON.parse(response.tasks)
+    localStorage.setItem('tasks', JSON.stringify(tasksObjectFromApi))
+    const tasksList = document.querySelectorAll('li')
+    for (let task of tasksList) {
+      task.remove()
+    }
+    setSectionsContent()
+  } catch {
+    document.getElementById('loadData').innerText = 'Load'
+    console.log('An error ocurred, so sorry!')
+  }
+}
+async function getResponseAsJson(URL) {
+  const response = await fetch(URL);
+  const jsonResponse = await response.json();
+  return jsonResponse;
+}
+function darkMode(){
+  var element = document.getElementById("main-div");
+  var button = document.getElementById("darkMode");
+  var button2 = document.getElementById("brightMode");
+  button.classList.add("hidden-task")
+  button2.classList.remove("hidden-task")
+  element.classList.remove("main-div")
+  element.classList.add("dark");
+  
+
+}
+function brightMode(){
+  var element = document.getElementById("main-div");
+  var button = document.getElementById("darkMode");
+  var button2 = document.getElementById("brightMode");
+  button2.classList.add("hidden-task")
+  button.classList.remove("hidden-task")
+  element.classList.remove("dark")
+  element.classList.add("main-div");
+
 }

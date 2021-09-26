@@ -9,9 +9,15 @@
     <title>Tasks manager</title>
   </head>
   <body>
-    <div id="main-div">
+    <div id="main-div" class="main-div">
     <h2 id="page-title">Task Organizer</h2>
-    <input type="search" id="search" placeholder="search task" onkeyup="taskFilter(event)" />
+    <div>
+      <input type="search" id="search" placeholder="search task" onkeyup="taskFilter(event)" />
+      <button id="saveData" onclick="saveDataFromAPI()">Save</button>
+      <button id="loadData" onclick="loadDataFromAPI()">Load</button>
+      <button id="darkMode" onclick="darkMode()">darkMode</button>
+      <button id="brightMode" onclick="brightMode()" class="hidden-task">brightMode</button>
+    </div>
     <!-- <button>search</button> -->
     <div id="task-area" ondblclick="doubleClickHandler(event)" onmouseover="hoverHandler(event)">
       <section id="todo">
