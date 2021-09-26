@@ -16,5 +16,5 @@ Task manager allows you to add taksks to 3 different lists :
  you can load stored data from an api adress and change the tasks in you see according to the api last save.
  you can save the tasks you see at the api adress and change the data there according to the data on the app.
                                                **link to the site**
-    link : https://github.com/ronco1812/kanban-final/pull/1                                           
+    link : https://ronco1812.github.io/kanban-final/solution/                                          
  The Task manager is totally free so enjoy and have a taskfull day 😁.
